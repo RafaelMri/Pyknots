@@ -1,4 +1,4 @@
-from pyknots.braids import Braid
+from pyknots.modules.braids import Braid
 from sympy import symbols
 
 __all__ = ['Singbraid']

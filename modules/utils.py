@@ -1,4 +1,4 @@
-from pyknots import *
+#from pyknots import *
 import numpy as np
 from numpy.linalg import inv
 from itertools import product

@@ -14,9 +14,9 @@ TODO:
 """
 
 import numpy as np
-from pyknots.tables import Table
-from pyknots.groups import Group
-from pyknots.utils import issquare, applymorphism
+from pyknots.modules.tables import Table
+from pyknots.modules.groups import Group
+from pyknots.modules.utils import issquare, applymorphism
 import json
 
 __all__ = ['Quandle', 'Biquandle', 'Singquandle',

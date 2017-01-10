@@ -19,8 +19,8 @@ import numpy as np
 from itertools import permutations
 from math import factorial
 
-from pyknots.tables import Table
-from pyknots.utils import permtomat, allelems
+from pyknots.modules.tables import Table
+from pyknots.modules.utils import permtomat, allelems
 
 __all__ = ['Group', 'Cyclic_Group', 'Multiplicative_Group',
 'Dihedral_Group', 'Symmetric_Group']

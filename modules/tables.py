@@ -5,7 +5,7 @@
 
 import numpy as np
 from itertools import permutations
-from pyknots.utils import issquare, permtomat, allelems, mergedicts, applymorphism
+from pyknots.modules.utils import issquare, permtomat, allelems, mergedicts, applymorphism
 import json
 
 __all__ = ['Table']
