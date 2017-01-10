@@ -1,0 +1,5 @@
+A collection of sources:
+
+    1: "J. C. Cha and C. Livingston, KnotInfo: Table of Knot Invariants, http://www.indiana.edu/~knotinfo",
+    2: "Patrick Dehorney, A Fast Method for Comparing Braids.",
+    3: "Churchill, Ehlamdadi, Hajij, Nelson: Singular Knots and Involutive Quandles"
