@@ -1,4 +1,3 @@
-#Pyknots
 
 A collection of tools for use with computations in knot theory.
 
