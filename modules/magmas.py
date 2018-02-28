@@ -1,22 +1,26 @@
-""" Contains primitive base-class Table, which has all methods
-    regarding operation table properties.
+""" Contains the base-class Magma, which has all methods
+    regarding cayley table properties.
+
+FIXME:
+    - fix attributes: decide between elems, finite_set, perms, etc.
 
 """
 
 import numpy as np
-from itertools import permutations
+from itertools import permutations, product
 from pyknots.modules.utils import issquare, permtomat, allelems, mergedicts, applymorphism
 import json
 
-__all__ = ['Table']
+__all__ = ['Magma', 'Direct_Product']
 
-class Table(object):
+class Magma(object):
     def __init__(self, matrix):
         if issquare(matrix):
             self.array = np.array(matrix)
             self.order = len(matrix[0])
             self.index = np.amin(self.array)
             self.elems = allelems(self.array.tolist())
+            self.finite_set = self.elems
         else:
             raise TypeError('Input %s not a square matrix.' % (matrix))
 
@@ -104,8 +108,8 @@ class Table(object):
                     return False
         return True
 
-    def is_invertible(self):
-        """ X is invertible if for all a, b in X, there is unique
+    def is_left_invertible(self):
+        """ X is left invertible if for all a, b in X, there is unique
             x such that x*a = b.
         """
         M = self.array
@@ -119,7 +123,7 @@ class Table(object):
                     return False
         return True
 
-    def is_rinvertible(self):
+    def is_right_invertible(self):
         """ X is right invertible if for all a, b in X, there is unique
             x such that a*x = b.
         """
@@ -241,3 +245,23 @@ class Table(object):
 
     def all_homomorphisms(self, quandle):
         raise NotImplemented
+
+
+class Direct_Product(Magma):
+    """ Returns table representing the direct product of magma1 and magma2."""
+    def __init__(self, magma1, magma2):
+        self.magma1, self.magma2 = magma1, magma2
+        self.finite_set = list(product(magma1.elems, magma2.elems))
+        self.order = magma1.order * magma2.order
+        self.elems = [i for i in range(self.order)]
+        self.array = self._matrix()
+        self.index = 0
+
+    def _matrix(self):
+        M1, M2 = self.magma1.array, self.magma2.array
+        M = np.zeros((self.order, self.order), dtype=int)
+        for i, j in enumerate(self.finite_set):
+            for m, n in enumerate(self.finite_set):
+                a = (M1[j[0], n[0]], M2[j[1], n[1]])
+                M[i,m] = self.finite_set.index(a)
+        return M

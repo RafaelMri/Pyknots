@@ -1,10 +1,9 @@
 #from pyknots import *
 import numpy as np
 from numpy.linalg import inv
-from itertools import product
 
-__all__ = ['singify', 'genquandles', 'permtomat', 'issquare', 'allelems', 'mergedicts',
-           'applymorphism', 'directproduct']
+__all__ = ['singify', 'permtomat', 'issquare', 'allelems', 'mergedicts',
+           'applymorphism']
 
 def _check_type(*args):
     """ Checks type of input, returns tuple of input as np.ndarrays. Used
@@ -112,18 +111,6 @@ def applymorphism(matrix, perm):
     M = vfunc(matrix)
     M = np.dot(np.dot(inv(p), M), p)
     return M.astype(int)
-
-def directproduct(group1, group2):
-    """ Returns table representing the direct product of group1 and group2."""
-    M1, M2 = group1.array, group2.array
-    p = list(product(allelems(group1.array), allelems(group2.array)))
-    order = group1.order * group2.order
-    M = np.zeros((order, order), dtype=int)
-    for i, j in enumerate(p):
-        for m, n in enumerate(p):
-            a = (M1[j[0], n[0]], M2[j[1], n[1]])
-            M[i,m] = p.index(a)
-    return M
 
 def graphtomat(graph):
     """ Convert dictionary representations of graphs like those used in graph

@@ -18,14 +18,14 @@ TODO:
 import numpy as np
 from itertools import permutations
 from math import factorial
-
-from pyknots.modules.tables import Table
+from pyknots.modules.magmas import Magma
 from pyknots.modules.utils import permtomat, allelems
+
 
 __all__ = ['Group', 'Cyclic_Group', 'Multiplicative_Group',
 'Dihedral_Group', 'Symmetric_Group']
 
-class Group(Table):
+class Group(Magma):
     """ Pass finite set as tuple, set, or list of elements, along with
         op - any function that accepts x, y, and modulus as args and
         returns 1 element. Will accept a list of lists and no op to
@@ -213,8 +213,18 @@ class Multiplicative_Group(Group):
     """ Returns multiplicative group of integers mod n."""
     def __init__(self, n):
         def op(x,y,p):  return (x*y) % p
-        finite_set = [i for i in range(1, n)]
-        super().__init__(finite_set, op)
+        self.op = op
+        self.finite_set = [i for i in range(1, n)]
+        self.order = n-1
+        M = self._matrix()
+        super().__init__(M)
+
+    def _matrix(self):
+        M = np.zeros((self.order, self.order), dtype=int)
+        for i, j in enumerate(self.finite_set):
+            for m, n in enumerate(self.finite_set):
+                M[i,m] = self.op(j, n, self.order+1)
+        return M
 
 class Dihedral_Group(Group):
     """ Returns dihedral group of order 2n."""

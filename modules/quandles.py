@@ -14,22 +14,24 @@ TODO:
 """
 
 import numpy as np
-from pyknots.modules.tables import Table
+from pyknots.modules.magmas import Magma
 from pyknots.modules.groups import Group
 from pyknots.modules.utils import issquare, applymorphism
 import json
+import os
 
 __all__ = ['Quandle', 'Biquandle', 'Singquandle',
 'Alexander_Quandle', 'Conj_Quandle', 'Trivial_Quandle']
 
-class Quandle(Table):
+class Quandle(Magma):
     """Instantiate a quandle object by passing Quandle() a matrix, a
        string representation of the RIG index, or a numpy array.
     """
     def __init__(self, matrix):
         if type(matrix) is str:
+            path = os.path.dirname(os.path.realpath(__file__)) + "\data\RIG_quandles.json"
             try:
-                with open('RIG_quandles.json', 'r') as fp:
+                with open(path, 'r') as fp:
                     matrix = json.load(fp)[matrix]
                     self.__init__(matrix)
             except KeyError:
@@ -46,6 +48,16 @@ class Quandle(Table):
         M2 = Trivial_Quandle(self.order, self.index).array
         B = Biquandle(M1, M2)
         return B
+
+    def inverse_quandle(self):
+        M = self.array
+        n = self.order
+        new_M = np.zeros((n, n), dtype=int)
+        for i in range(n):
+            for j in range(n):
+                k = M[i,j]
+                new_M[k,j] = i
+        return Quandle(new_M)
 
     def is_rack(self):
         """ A rack is a set with 2 axioms: for a, b, c in X,
@@ -78,6 +90,12 @@ class Quandle(Table):
             if M[i,i] != i+ind:
                 return False
         return True
+
+    def is_biquandle(self):
+        return False
+
+    def is_singquandle(self):
+        return False
 
     def is_kei(self):
         if self.is_quandle() and self.is_involutory():
@@ -190,9 +208,12 @@ class Biquandle(object):
                     return False
         return True
 
+    def is_singquandle(self):
+        return False
+
     def is_invertible(self):
-        if self.quandle1.is_invertible():
-            if self.quandle2.is_invertible():
+        if self.quandle1.is_left_invertible():
+            if self.quandle2.is_left_invertible():
                 return True
         return False
 
@@ -236,12 +257,13 @@ class Singquandle(object):
 
     def is_invertible(self):
         """ Check whether * is an invertible operation."""
-        if not self.quandle1.is_invertible():
+        if not self.quandle1.is_left_invertible():
             return False
         return True
 
+    """
     def check_identity(self):
-        """ R1(x,y) = R2(y,x)*x, R2(x,y) = R1(y,x)*y."""
+         R1(x,y) = R2(y,x)*x, R2(x,y) = R1(y,x)*y.
         M1, M2, M3 = self.array1, self.array2, self.array3
         ind = self.index
         for a in range(self.order):
@@ -251,8 +273,18 @@ class Singquandle(object):
                 if M3[a,b] != M1[M2[b,a]-ind,b]:
                     return False
         return True
+    """
 
     def is_singquandle(self):
+        """ Check if the object is a singquandle."""
+        if self.is_nonoriented_singquandle() or self.is_oriented_singquandle():
+            return True
+        return False
+
+    def is_nonoriented_singquandle(self):
+        """ Check if the singquandle satisfies the axioms of a nonoriented
+            singquandle.
+        """
         M1, M2, M3 = self.array1, self.array2, self.array3
         ind = self.index
         if not self.is_invertible():
@@ -273,6 +305,30 @@ class Singquandle(object):
                     if M1[M2[a,b]-ind,c] != M2[M1[a,c]-ind,M1[b,c]-ind]:
                         return False
                     if M1[M3[a,b]-ind,c] != M3[M1[a,c]-ind,M1[b,c]-ind]:
+                        return False
+        return True
+
+    def is_oriented_singquandle(self):
+        """ Check if the singquandle satisfies the axioms of an oriented
+            singquandle.
+        """
+        M1, M2, M3 = self.array1, self.array2, self.array3
+        n, ind = self.order, self.index
+        inv = self.quandle1.inverse_quandle().array
+        if not self.is_invertible():
+            return False
+        for x in range(n):
+            for y in range(n):
+                for z in range(n):
+                    if M1[M2[inv[x,y],z],y] != M2[x,M1[z,y]]:
+                        return False
+                    if M3[inv[x,y],z] != inv[M3[x,M1[z,y]], y]:
+                        return False
+                    if M1[inv[y,M2[x,z]],x] != inv[M1[y,M3[x,z]], z]:
+                        return False
+                    if M3[x,y] != M2[y,M1[x,y]]:
+                        return False
+                    if M1[M2[x,y], M3[x,y]] != M3[y, M1[x,y]]:
                         return False
         return True
 
