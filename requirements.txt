@@ -1,1 +1,0 @@
-# Numpy is required, and Sympy is required to run braids.py. (Necessary for computing symbolic determinants)

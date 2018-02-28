@@ -1,5 +1,7 @@
 A collection of sources:
 
     1: "J. C. Cha and C. Livingston, KnotInfo: Table of Knot Invariants, http://www.indiana.edu/~knotinfo",
-    2: "Patrick Dehorney, A Fast Method for Comparing Braids.",
-    3: "Churchill, Ehlamdadi, Hajij, Nelson: Singular Knots and Involutive Quandles"
+    2: "Patrick Dehorney: A Fast Method for Comparing Braids.",
+    3: "Churchill, Ehlamdadi, Hajij, Nelson: Singular Knots and Involutive Quandles",
+    4: "L. Vendramin. Rig, a GAP package for racks, quandles and Nichols algebras. Available at http://github.com/vendramin/rig/",
+    5: "Clark, Saito, Yeatman: Prime oriented knots up to 13 crossings, http://shell.cas.usf.edu/~saito/QuandleColor/12965knotsGAP.txt"

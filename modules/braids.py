@@ -72,7 +72,8 @@ class Braid(object):
                 if not isinstance(i, int) or i ==0:
                     raise TypeError('Element %s in %s not an integer greater than 0.' %(i, braid))
         elif isinstance(braid, str):
-            path = os.path.dirname(os.path.realpath(__file__)) + "\data\knots_13.json"
+            dirname = os.path.dirname(os.path.realpath(__file__))
+            path = os.path.join(os.path.dirname(dirname), 'data', 'knots_13.json')
             with open(path, 'r') as fp:
                 knot_dict = json.load(fp)
                 try:

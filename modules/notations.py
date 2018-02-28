@@ -1,6 +1,6 @@
 # Notation conversion functions.
 
-__all__ = ['crossing_pattern', 'dowker_thistlethwaite']
+__all__ = ['crossing_pattern', 'dowker_thistlethwaite', 'gauss']
 
 def crossing_pattern(braid):
     """ Returns the crossing pattern defined by tracing the knot from

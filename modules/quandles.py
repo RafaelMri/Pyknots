@@ -29,7 +29,8 @@ class Quandle(Magma):
     """
     def __init__(self, matrix):
         if type(matrix) is str:
-            path = os.path.dirname(os.path.realpath(__file__)) + "\data\RIG_quandles.json"
+            dirname = os.path.dirname(os.path.realpath(__file__)) 
+            path = os.path.join(os.path.dirname(dirname), 'data', 'RIG_quandles.json')
             try:
                 with open(path, 'r') as fp:
                     matrix = json.load(fp)[matrix]
